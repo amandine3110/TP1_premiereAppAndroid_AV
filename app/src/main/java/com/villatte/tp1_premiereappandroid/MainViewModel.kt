@@ -34,4 +34,11 @@ class MainViewModel : ViewModel() {
             personnes.value = service.lastperson(api_key).results
         }
     }
+
+    fun getFilmsViaRecherche(searchText) {
+        viewModelScope.launch {
+            movies.value = service.moviesKeyWord(api_key, searchText).results
+        }
+    }
+
 }
