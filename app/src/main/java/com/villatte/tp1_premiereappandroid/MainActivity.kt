@@ -5,10 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -16,10 +20,12 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Card
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,13 +34,16 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -42,6 +51,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.villatte.tp1_premiereappandroid.ui.theme.TP1_premiereAppAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -63,6 +73,8 @@ class MainActivity : ComponentActivity() {
 
 
                     val navController = rememberNavController()
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
 
                     var searchBarVisible by remember {
                         mutableStateOf(false)
@@ -72,96 +84,123 @@ class MainActivity : ComponentActivity() {
                         mutableStateOf("")
                     }
 
-                    Scaffold(
-                        topBar = {
-                            if (!searchBarVisible) {
-                                TopAppBar(title = { Text("Recherche") },
-                                    navigationIcon = {
-                                        IconButton(onClick = { searchBarVisible = true }) {
-                                            Icon(Icons.Filled.Search, contentDescription = null)
+
+
+
+                        Scaffold(
+
+                            topBar = {
+                                if (currentDestination?.route != "profile") {
+                                if (!searchBarVisible) {
+                                    TopAppBar(title = { Text("Recherche") },
+                                        navigationIcon = {
+                                            IconButton(onClick = { /* do something */ }) {
+                                                Icon(
+                                                    imageVector = Icons.Filled.ArrowBack,
+                                                    contentDescription = "Localized description"
+                                                )
+                                            }
+
+                                        },
+                                        actions = {
+                                            IconButton(onClick = { searchBarVisible = true }) {
+                                                Icon(Icons.Filled.Search, contentDescription = null)
+                                            }
                                         }
-                                    },
-                                    actions = {
+                                    )
+                                } else {
+                                    SearchBar(
+                                        query = searchText,
+                                        onQueryChange = {
+                                            searchText = it
+                                        },
+                                        onSearch = {
+                                            viewModel.getFilmsViaRecherche(it)
+                                        },
+                                        active = true,
+                                        onActiveChange = {
 
+                                        },
+                                        modifier = Modifier.height(100.dp)
+                                    ) {
+                                        val movies by viewModel.searchMovies.collectAsState()
+                                        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                                            items(movies) {
+                                                    movie ->
 
+                                                Card() {
+                                                    AsyncImage(
+                                                        model = "https://image.tmdb.org/t/p/w780" + movie.poster_path,
+                                                        contentDescription = "Affiche du film",
+                                                        contentScale = ContentScale.Fit
+                                                    )
+                                                    Text(text = movie.original_title, fontWeight = FontWeight.Bold)
+                                                    Text(text = movie.release_date)
+                                                }
+                                            }
+                                        }
                                     }
-                                )
-                            } else {
-                                SearchBar(
-                                    query = searchText,
-                                    onQueryChange = {
-                                           searchText=it
-                                    },
-                                    onSearch = {
-
-                                    },
-                                    active = true,
-                                    onActiveChange = {
-
-                                    },
-                                    modifier = Modifier.height(100.dp)
-                                ) {
-
+                                }
+                            }
+                            },
+                            bottomBar = {
+                                if (currentDestination?.route != "profile") {
+                                BottomNavigation {
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Image(
+                                                painterResource(id = R.drawable.baseline_movie_24),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Films") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("filmsList")
+                                        }
+                                    )
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Image(
+                                                painterResource(id = R.drawable.baseline_tv_24),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Séries") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("seriesList")
+                                        }
+                                    )
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Icon(
+                                                Icons.Filled.Person,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Acteurs") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("actorsList")
+                                        }
+                                    )
                                 }
                             }
                             }
-                        ,
-                        bottomBar = {
-                            BottomNavigation {
-                                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                val currentDestination = navBackStackEntry?.destination
-                                BottomNavigationItem(
-                                    icon = {
-                                        Image(
-                                            painterResource(id = R.drawable.baseline_movie_24),
-                                            contentDescription = null
-                                        ) },
-                                    label = { Text("Films") },
-                                    selected = false,
-                                    onClick = {
-                                        navController.navigate("filmsList")
-                                    }
-                                )
-                                BottomNavigationItem(
-                                    icon = {
-                                        Image(
-                                            painterResource(id = R.drawable.baseline_tv_24),
-                                            contentDescription = null
-                                        )
-                                    },
-                                    label = { Text("Séries") },
-                                    selected = false,
-                                    onClick = {
-                                        navController.navigate("seriesList")
-                                    }
-                                )
-                                BottomNavigationItem(
-                                    icon = {
-                                        Icon(
-                                            Icons.Filled.Person,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    label = { Text("Acteurs") },
-                                    selected = false,
-                                    onClick = {
-                                        navController.navigate("actorsList")
-                                    }
-                                )
+                        ) { innerPadding ->
+                            NavHost(
+                                navController = navController,
+                                startDestination = "profile",
+                                modifier = Modifier.padding(innerPadding)
+                            ) {
+                                composable("profile") { Screen(windowSizeClass, navController) }
+                                composable("filmsList") { Films(viewModel) }
+                                composable("seriesList") { Series(viewModel) }
+                                composable("actorsList") { Actors(viewModel) }
                             }
                         }
-                    ) { innerPadding ->
-                        NavHost(
-                            navController = navController,
-                            startDestination = "profile",
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            composable("profile") { Screen(windowSizeClass, navController) }
-                            composable("filmsList") { Films(viewModel) }
-                            composable("seriesList") { Series(viewModel) }
-                            composable("actorsList") { Actors(viewModel) }
-                        }
-                    }
+
 
 
                 }
