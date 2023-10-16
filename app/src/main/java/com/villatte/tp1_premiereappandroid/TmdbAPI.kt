@@ -13,6 +13,6 @@ interface TmdbAPI {
     @GET("trending/person/week")
     suspend fun lastperson(@Query("api_key") api_key: String): Personnes
 
-    @GET("search/movie")
-    suspend fun moviesKeyWord(@Query("api_key") api_key: String, @Query("searchText") searchText: String): Films
+    @GET("search/movie?")
+    suspend fun moviesKeyWord(@Query("api_key") api_key: String, @Query("query") searchText: String): Films
 }

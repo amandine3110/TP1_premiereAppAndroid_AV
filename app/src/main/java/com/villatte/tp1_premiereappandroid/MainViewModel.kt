@@ -12,7 +12,6 @@ class MainViewModel : ViewModel() {
     val movies = MutableStateFlow<List<Film>>(listOf())
     val series = MutableStateFlow<List<Serie>>(listOf())
     val personnes = MutableStateFlow<List<Personne>>(listOf())
-    val searchMovies = MutableStateFlow<List<Film>>(listOf())
 
     val api_key = "d936676cee467fd5bde1950ab82959ee"
 
@@ -38,7 +37,7 @@ class MainViewModel : ViewModel() {
 
     fun getFilmsViaRecherche(searchText: String) {
         viewModelScope.launch {
-            searchMovies.value = service.moviesKeyWord(api_key, searchText).results
+            movies.value = service.moviesKeyWord(api_key, searchText).results
         }
     }
 

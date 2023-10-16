@@ -75,6 +75,9 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
+                    var searchBarActive by remember {
+                        mutableStateOf(false)
+                    }
 
                     var searchBarVisible by remember {
                         mutableStateOf(false)
@@ -83,10 +86,6 @@ class MainActivity : ComponentActivity() {
                     var searchText by remember {
                         mutableStateOf("")
                     }
-
-
-
-
                         Scaffold(
 
                             topBar = {
@@ -115,14 +114,15 @@ class MainActivity : ComponentActivity() {
                                             searchText = it
                                         },
                                         onSearch = {
-                                            //viewModel.getFilmsViaRecherche(it)
-                                            navController.navigate("searchFilmsList")
+                                            viewModel.getFilmsViaRecherche(it)
+                                            searchBarActive = false
                                         },
-                                        active = true,
+                                        active = searchBarActive,
                                         onActiveChange = {
-
+                                                         searchBarActive = it
                                         },
-                                        modifier = Modifier.height(100.dp)
+                                        modifier = Modifier.height(100.dp),
+                                        placeholder = { Text("Recherche...") }
                                     ) {
 
                                     }
@@ -184,7 +184,6 @@ class MainActivity : ComponentActivity() {
                                 composable("filmsList") { Films(viewModel) }
                                 composable("seriesList") { Series(viewModel) }
                                 composable("actorsList") { Actors(viewModel) }
-                                composable("searchFilmsList") { SearchFilms(viewModel, searchText) }
                             }
                         }
 

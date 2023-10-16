@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,7 +26,10 @@ import coil.compose.AsyncImage
 fun Films(viewModel: MainViewModel) {
     val movies by viewModel.movies.collectAsState()
 
-    if (movies.isEmpty()) viewModel.getFilmsInitiaux()
+
+    LaunchedEffect(true) {
+        viewModel.getFilmsInitiaux()
+    }
 
     /**
     LazyColumn {
@@ -53,27 +57,4 @@ Card() {
 
 }
 
-@Composable
-fun SearchFilms(viewModel: MainViewModel,keyword:String) {
-    val movies by viewModel.searchMovies.collectAsState()
-    if (movies.isEmpty()) viewModel.getFilmsViaRecherche(keyword)
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        items(movies) { movie ->
-
-            Card() {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w780" + movie.poster_path,
-                    contentDescription = "Affiche du film",
-                    contentScale = ContentScale.Fit
-                )
-                Text(text = movie.original_title, fontWeight = FontWeight.Bold)
-                Text(text = movie.release_date)
-            }
-        }
-    }
-}
 
