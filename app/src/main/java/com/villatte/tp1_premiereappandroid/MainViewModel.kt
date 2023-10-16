@@ -41,4 +41,16 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun getSeriesViaRecherche(searchText: String) {
+        viewModelScope.launch {
+            series.value = service.seriesKeyWord(api_key, searchText).results
+        }
+    }
+
+    fun getPersonnesViaRecherche(searchText: String) {
+        viewModelScope.launch {
+            personnes.value = service.personKeyWord(api_key, searchText).results
+        }
+    }
+
 }

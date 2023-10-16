@@ -15,4 +15,11 @@ interface TmdbAPI {
 
     @GET("search/movie?")
     suspend fun moviesKeyWord(@Query("api_key") api_key: String, @Query("query") searchText: String): Films
+
+    @GET("search/tv?")
+    suspend fun seriesKeyWord(@Query("api_key") api_key: String, @Query("query") searchText: String): Series
+
+    @GET("search/person?")
+    suspend fun personKeyWord(@Query("api_key") api_key: String, @Query("query") searchText: String): Personnes
+
 }

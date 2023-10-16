@@ -21,6 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -99,7 +100,6 @@ class MainActivity : ComponentActivity() {
                                                     contentDescription = "Localized description"
                                                 )
                                             }
-
                                         },
                                         actions = {
                                             IconButton(onClick = { searchBarVisible = true }) {
@@ -109,17 +109,29 @@ class MainActivity : ComponentActivity() {
                                     )
                                 } else {
                                     SearchBar(
+                                        trailingIcon = {
+                                        IconButton(onClick = { searchBarVisible = false }) {
+                                            Icon(Icons.Filled.Clear, contentDescription = null)
+                                        }},
                                         query = searchText,
                                         onQueryChange = {
                                             searchText = it
                                         },
                                         onSearch = {
-                                            viewModel.getFilmsViaRecherche(it)
+                                            if (currentDestination?.route == "filmsList") {
+                                                viewModel.getFilmsViaRecherche(it)
+                                            }
+                                            if (currentDestination?.route == "seriesList") {
+                                                viewModel.getSeriesViaRecherche(it)
+                                            }
+                                            if (currentDestination?.route == "actorsList") {
+                                                viewModel.getPersonnesViaRecherche(it)
+                                            }
                                             searchBarActive = false
                                         },
                                         active = searchBarActive,
                                         onActiveChange = {
-                                                         searchBarActive = it
+                                            searchBarActive = it
                                         },
                                         modifier = Modifier.height(100.dp),
                                         placeholder = { Text("Recherche...") }
