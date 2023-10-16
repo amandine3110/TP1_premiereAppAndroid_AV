@@ -115,7 +115,8 @@ class MainActivity : ComponentActivity() {
                                             searchText = it
                                         },
                                         onSearch = {
-                                            viewModel.getFilmsViaRecherche(it)
+                                            //viewModel.getFilmsViaRecherche(it)
+                                            navController.navigate("searchFilmsList")
                                         },
                                         active = true,
                                         onActiveChange = {
@@ -123,22 +124,7 @@ class MainActivity : ComponentActivity() {
                                         },
                                         modifier = Modifier.height(100.dp)
                                     ) {
-                                        val movies by viewModel.searchMovies.collectAsState()
-                                        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                                            items(movies) {
-                                                    movie ->
 
-                                                Card() {
-                                                    AsyncImage(
-                                                        model = "https://image.tmdb.org/t/p/w780" + movie.poster_path,
-                                                        contentDescription = "Affiche du film",
-                                                        contentScale = ContentScale.Fit
-                                                    )
-                                                    Text(text = movie.original_title, fontWeight = FontWeight.Bold)
-                                                    Text(text = movie.release_date)
-                                                }
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -198,6 +184,7 @@ class MainActivity : ComponentActivity() {
                                 composable("filmsList") { Films(viewModel) }
                                 composable("seriesList") { Series(viewModel) }
                                 composable("actorsList") { Actors(viewModel) }
+                                composable("searchFilmsList") { SearchFilms(viewModel, searchText) }
                             }
                         }
 
