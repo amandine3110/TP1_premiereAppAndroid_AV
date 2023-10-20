@@ -1,6 +1,7 @@
 package com.villatte.tp1_premiereappandroid
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TmdbAPI {
@@ -21,5 +22,8 @@ interface TmdbAPI {
 
     @GET("search/person?")
     suspend fun personKeyWord(@Query("api_key") api_key: String, @Query("query") searchText: String): Personnes
+
+    @GET("movie/{id}?append_to_response=credits")
+    suspend fun moviesDetails(@Path("id") filmId: String, @Query("api_key") api_key: String): DetailsFilms
 
 }

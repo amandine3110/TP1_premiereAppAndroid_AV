@@ -20,10 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 @Composable
-fun Series(viewModel: MainViewModel) {
+fun Series(viewModel: MainViewModel, navController: NavController) {
     val series by viewModel.series.collectAsState()
 
     LaunchedEffect(true) {

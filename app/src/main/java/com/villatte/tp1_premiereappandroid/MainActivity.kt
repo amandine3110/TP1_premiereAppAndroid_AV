@@ -36,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -94,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 if (!searchBarVisible) {
                                     TopAppBar(title = { Text("Recherche") },
                                         navigationIcon = {
-                                            IconButton(onClick = { /* do something */ }) {
+                                            IconButton(onClick = { navController.navigate("profile") }) {
                                                 Icon(
                                                     imageVector = Icons.Filled.ArrowBack,
                                                     contentDescription = "Localized description"
@@ -193,9 +194,13 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(innerPadding)
                             ) {
                                 composable("profile") { Screen(windowSizeClass, navController) }
-                                composable("filmsList") { Films(viewModel) }
-                                composable("seriesList") { Series(viewModel) }
-                                composable("actorsList") { Actors(viewModel) }
+                                composable("filmsList") { Films(viewModel, navController) }
+                                composable("seriesList") { Series(viewModel, navController) }
+                                composable("actorsList") { Actors(viewModel, navController) }
+                                composable("detailsFilms/{filmId}") {
+                                    val filmId = it.arguments?.getString("filmId") ?: ""
+                                    DetailsMovies(viewModel, filmId, navController)
+                                }
                             }
                         }
 
