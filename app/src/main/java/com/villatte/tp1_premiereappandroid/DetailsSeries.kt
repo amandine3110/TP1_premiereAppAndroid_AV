@@ -28,36 +28,36 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 @Composable
-fun DetailsMovies(viewModel: MainViewModel, filmId: String, navController: NavController) {
-    val movie by viewModel.detailsMovies.collectAsState()
+fun DetailsSeries(viewModel: MainViewModel, tvId: String, navController: NavController) {
+    val serie by viewModel.detailsSeries.collectAsState()
 
     LaunchedEffect(true) {
-        viewModel.getDetailsFilms(filmId)
+        viewModel.getDetailsSeries(tvId)
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.verticalScroll(rememberScrollState())) {
         Spacer(Modifier.height(20.dp))
-        Text(text = movie.original_title, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, modifier = Modifier.padding(15.dp))
+        Text(text = serie.original_name, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, modifier = Modifier.padding(15.dp))
         Spacer(Modifier.height(15.dp))
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w780" + movie.backdrop_path,
-            contentDescription = "Image du film",
+            model = "https://image.tmdb.org/t/p/w780" + serie.backdrop_path,
+            contentDescription = "Image de la serie",
             contentScale = ContentScale.Fit
         )
-        Text(text = movie.release_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+        Text(text = serie.last_air_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         var genres = ""
-        movie.genres.forEach {
+        serie.genres.forEach {
             genres += it.name + ", "
         }
         Text(text = genres.substring(0, genres.length), textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         Spacer(Modifier.height(20.dp))
         Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
-        Text(text = movie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+        Text(text = serie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
         //LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
             //items(movie.credits.cast) {
                     //cast ->
-            movie.credits.cast.forEach {
+            serie.credits.cast.forEach {
                 Card() {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w780" + it.profile_path,

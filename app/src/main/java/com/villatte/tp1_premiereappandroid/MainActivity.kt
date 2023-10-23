@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                             topBar = {
                                 if (currentDestination?.route != "profile") {
                                 if (!searchBarVisible) {
-                                    TopAppBar(title = { Text("Recherche") },
+                                    TopAppBar(title = { Text("Fav'app") },
                                         navigationIcon = {
                                             IconButton(onClick = { navController.navigate("profile") }) {
                                                 Icon(
@@ -200,6 +200,10 @@ class MainActivity : ComponentActivity() {
                                 composable("detailsFilms/{filmId}") {
                                     val filmId = it.arguments?.getString("filmId") ?: ""
                                     DetailsMovies(viewModel, filmId, navController)
+                                }
+                                composable("detailsSeries/{tvId}") {
+                                    val tvId = it.arguments?.getString("tvId") ?: ""
+                                    DetailsSeries(viewModel, tvId, navController)
                                 }
                             }
                         }

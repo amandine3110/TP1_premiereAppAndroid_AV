@@ -121,6 +121,7 @@ fun Screen(windowClass: WindowSizeClass, navController: NavController) {
             }
         }
             else -> {
+
 Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
     Image(
         painterResource(id = R.drawable.chat_intelligent),
