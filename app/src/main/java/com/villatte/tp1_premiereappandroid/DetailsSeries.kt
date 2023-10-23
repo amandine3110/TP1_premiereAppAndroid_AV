@@ -2,12 +2,16 @@ package com.villatte.tp1_premiereappandroid
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -44,37 +48,39 @@ fun DetailsSeries(viewModel: MainViewModel, tvId: String, navController: NavCont
             contentDescription = "Image de la serie",
             contentScale = ContentScale.Fit
         )
-        Text(text = serie.last_air_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-        var genres = ""
-        serie.genres.forEach {
-            genres += it.name + ", "
+        Row() {
+            Column() {
+                Spacer(Modifier.height(15.dp))
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w780" + serie.poster_path,
+                    contentDescription = "Image de la serie",
+                    modifier = Modifier.size(140.dp)
+                )
+            }
+            Column() {
+                Text(text = serie.last_air_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+                Text(text = serie.genres.map { it.name }.joinToString(", "))
+            }
         }
-        Text(text = genres.substring(0, genres.length), textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         Spacer(Modifier.height(20.dp))
-        Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
+        Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Text(text = serie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-        Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
-        //LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            //items(movie.credits.cast) {
-                    //cast ->
-            serie.credits.cast.forEach {
-                Card() {
+        Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(15.dp))
+        LazyRow() {
+            items(serie.credits.cast) { cast ->
+                Card(modifier = Modifier.padding(10.dp)) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w780" + it.profile_path,
+                        model = "https://image.tmdb.org/t/p/w780" + cast.profile_path,
                         contentDescription = "Photo de la personne",
-                        contentScale = ContentScale.Fit
+                        modifier = Modifier.size(200.dp)
                     )
-                    Text(text = it.name, fontWeight = FontWeight.Bold)
-                    Text(text = it.character)
+                    Text(text = cast.name, fontWeight = FontWeight.Bold)
+                    Text(text = cast.character)
                 }
             }
-        //}
+        }
     }
-
-
-
-
-
 }
 
 

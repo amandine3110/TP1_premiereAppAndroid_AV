@@ -29,18 +29,9 @@ import coil.compose.AsyncImage
 fun Films(viewModel: MainViewModel, navController: NavController) {
     val movies by viewModel.movies.collectAsState()
 
-
     LaunchedEffect(true) {
         viewModel.getFilmsInitiaux()
     }
-
-    /**
-    LazyColumn {
-        items(movies) {
-            movie -> Text(text = movie.original_title)
-        }
-    }
-    */
 
     LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         items(movies) {

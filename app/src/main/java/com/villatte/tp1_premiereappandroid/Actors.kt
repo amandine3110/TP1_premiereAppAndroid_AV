@@ -31,15 +31,14 @@ fun Actors(viewModel: MainViewModel, navController: NavController) {
     LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         items(actors) {
                 actor ->
-
-Card() {
-    AsyncImage(
-        model = "https://image.tmdb.org/t/p/w780" + actor.profile_path,
-        contentDescription = "Photo de la personne",
-        contentScale = ContentScale.Fit
-    )
-    Text(text = actor.name, fontWeight = FontWeight.Bold)
-}
+                    Card() {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780" + actor.profile_path,
+                            contentDescription = "Photo de la personne",
+                            contentScale = ContentScale.Fit
+                        )
+                        Text(text = actor.name, fontWeight = FontWeight.Bold)
+                    }
                 }
     }
 

@@ -49,25 +49,7 @@ data class Serie(
     val vote_average: Double,
     val vote_count: Int
 )
-/**
-data class Personnes(
-    val adult: Boolean,
-    val also_known_as: List<String>,
-    val biography: String,
-    val birthday: String,
-    val credits: Credits,
-    val deathday: Any,
-    val gender: Int,
-    val homepage: Any,
-    val id: Int,
-    val imdb_id: String,
-    val known_for_department: String,
-    val name: String,
-    val place_of_birth: String,
-    val popularity: Double,
-    val profile_path: String
-)
-*/
+
 data class Personnes(
     val page: Int,
     val results: List<Personne>,
@@ -134,50 +116,6 @@ data class DetailsFilms(
     val vote_average: Double = 0.0,
     val vote_count: Int = 0
 )
-/**
-data class Credits(
-    val cast: List<Cast> = listOf(),
-    val crew: List<Crew> = listOf()
-)
-
-data class Genre(
-    val id: Int = 0,
-    val name: String = ""
-)
-
-data class ProductionCompany(
-    val id: Int = 0,
-    val logo_path: String = "",
-    val name: String = "",
-    val origin_country: String = ""
-)
-
-data class ProductionCountry(
-    val iso_3166_1: String = "",
-    val name: String = ""
-)
-
-data class SpokenLanguage(
-    val english_name: String = "",
-    val iso_639_1: String = "",
-    val name: String = ""
-)
-
-data class Cast(
-    val adult: Boolean = false,
-    val cast_id: Int = 0,
-    val character: String = "",
-    val credit_id: String = "",
-    val gender: Int = 0,
-    val id: Int = 0,
-    val known_for_department: String = "",
-    val name: String = "",
-    val order: Int = 0,
-    val original_name: String = "",
-    val popularity: Double = 0.0,
-    val profile_path: String = ""
-)
-*/
 
 data class Crew(
     val adult: Boolean = false,

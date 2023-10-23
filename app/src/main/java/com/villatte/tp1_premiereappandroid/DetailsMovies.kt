@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,8 +48,7 @@ fun DetailsMovies(viewModel: MainViewModel, filmId: String, navController: NavCo
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w780" + movie.backdrop_path,
             contentDescription = "Image du film",
-            //contentScale = ContentScale.Fit
-        Modifier.fillMaxWidth()
+            contentScale = ContentScale.Fit
         )
         Row() {
             Column() {
@@ -65,35 +65,24 @@ fun DetailsMovies(viewModel: MainViewModel, filmId: String, navController: NavCo
                 }
             }
         Spacer(Modifier.height(20.dp))
-        Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
+        Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Text(text = movie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-        Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
-        //LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(15.dp))
         LazyRow() {
-            items(movie.credits.cast) {
-            //items(movie.credits.cast) {
-                    cast ->
-            //movie.credits.cast.forEach {
-                Card() {
+            items(movie.credits.cast) { cast ->
+                Card(modifier = Modifier.padding(10.dp)) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w780" + cast.profile_path,
                         contentDescription = "Photo de la personne",
-                        //contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(180.dp)
+                        modifier = Modifier.size(200.dp)
                     )
                     Text(text = cast.name, fontWeight = FontWeight.Bold)
                     Text(text = cast.character)
                 }
             }
         }
-        //}
     }
-
-
-
-
-
 }
 
 

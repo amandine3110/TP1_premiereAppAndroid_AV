@@ -56,6 +56,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.villatte.tp1_premiereappandroid.ui.theme.TP1_premiereAppAndroidTheme
 
+
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
@@ -73,152 +74,132 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     var searchBarActive by remember {
                         mutableStateOf(false)
                     }
-
                     var searchBarVisible by remember {
                         mutableStateOf(false)
                     }
-
                     var searchText by remember {
                         mutableStateOf("")
                     }
-                    /**
+
                     Scaffold(
+                        topBar = {
+                            if (currentDestination?.route != "profile") {
+                                if (!searchBarVisible) {
+                                    TopAppBar(title = { Text("Fav'app") },
+                                        actions = {
+                                            IconButton(onClick = { searchBarVisible = true }) {
+                                                Icon(Icons.Filled.Search, contentDescription = null)
+                                            }
+                                        }
+                                    )
+                                } else {
+                                    SearchBar(
+                                        trailingIcon = {
+                                            IconButton(onClick = { searchBarVisible = false }) {
+                                                Icon(Icons.Filled.Clear, contentDescription = null)
+                                            }},
+                                        query = searchText,
+                                        onQueryChange = {
+                                            searchText = it
+                                        },
+                                        onSearch = {
+                                            if (currentDestination?.route == "filmsList") {
+                                                viewModel.getFilmsViaRecherche(it)
+                                            }
+                                            if (currentDestination?.route == "seriesList") {
+                                                viewModel.getSeriesViaRecherche(it)
+                                            }
+                                            if (currentDestination?.route == "actorsList") {
+                                                viewModel.getPersonnesViaRecherche(it)
+                                            }
+                                            searchBarActive = false
+                                        },
+                                        active = searchBarActive,
+                                        onActiveChange = {
+                                            searchBarActive = it
+                                        },
+                                        modifier = Modifier.height(100.dp),
+                                        placeholder = { Text("Recherche...") }
+                                    ) {
 
-                    topBar = {
-                    if (currentDestination?.route != "profile") {
-                    if (!searchBarVisible) {
-                    TopAppBar(title = { Text("Fav'app") },
-                    /**navigationIcon = {
-                    IconButton(onClick = { navController.navigate("profile") }) {
-                    Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Localized description"
-                    )
-                    }
-                    },*/
-                    actions = {
-                    IconButton(onClick = { searchBarVisible = true }) {
-                    Icon(Icons.Filled.Search, contentDescription = null)
-                    }
-                    }
-                    )
-                    } else {
-                    SearchBar(
-                    trailingIcon = {
-                    IconButton(onClick = { searchBarVisible = false }) {
-                    Icon(Icons.Filled.Clear, contentDescription = null)
-                    }},
-                    query = searchText,
-                    onQueryChange = {
-                    searchText = it
-                    },
-                    onSearch = {
-                    if (currentDestination?.route == "filmsList") {
-                    viewModel.getFilmsViaRecherche(it)
-                    }
-                    if (currentDestination?.route == "seriesList") {
-                    viewModel.getSeriesViaRecherche(it)
-                    }
-                    if (currentDestination?.route == "actorsList") {
-                    viewModel.getPersonnesViaRecherche(it)
-                    }
-                    searchBarActive = false
-                    },
-                    active = searchBarActive,
-                    onActiveChange = {
-                    searchBarActive = it
-                    },
-                    modifier = Modifier.height(100.dp),
-                    placeholder = { Text("Recherche...") }
-                    ) {
-
-                    }
-                    }
-                    }
-                    },
-                    bottomBar = {
-                    if (currentDestination?.route != "profile") {
-                    BottomNavigation {
-                    BottomNavigationItem(
-                    icon = {
-                    Image(
-                    painterResource(id = R.drawable.baseline_movie_24),
-                    contentDescription = null
-                    )
-                    },
-                    label = { Text("Films") },
-                    selected = false,
-                    onClick = {
-                    navController.navigate("filmsList")
-                    }
-                    )
-                    BottomNavigationItem(
-                    icon = {
-                    Image(
-                    painterResource(id = R.drawable.baseline_tv_24),
-                    contentDescription = null
-                    )
-                    },
-                    label = { Text("Séries") },
-                    selected = false,
-                    onClick = {
-                    navController.navigate("seriesList")
-                    }
-                    )
-                    BottomNavigationItem(
-                    icon = {
-                    Icon(
-                    Icons.Filled.Person,
-                    contentDescription = null
-                    )
-                    },
-                    label = { Text("Acteurs") },
-                    selected = false,
-                    onClick = {
-                    navController.navigate("actorsList")
-                    }
-                    )
-                    }
-                    }
-                    }
+                                    }
+                                }
+                            }
+                        },
+                        bottomBar = {
+                            if (currentDestination?.route != "profile") {
+                                BottomNavigation {
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Image(
+                                                painterResource(id = R.drawable.baseline_movie_24),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Films") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("filmsList")
+                                        }
+                                    )
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Image(
+                                                painterResource(id = R.drawable.baseline_tv_24),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Séries") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("seriesList")
+                                        }
+                                    )
+                                    BottomNavigationItem(
+                                        icon = {
+                                            Icon(
+                                                Icons.Filled.Person,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        label = { Text("Acteurs") },
+                                        selected = false,
+                                        onClick = {
+                                            navController.navigate("actorsList")
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     ) { innerPadding ->
-                     */
-                    MyScaffold(windowSizeClass, navController, viewModel)
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = "profile",
-                        //modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable("profile") { Screen(windowSizeClass, navController) }
-                        //composable("films") { MyScaffold(windowSizeClass, navController, viewModel) }
-                        composable("filmsList") { Films(viewModel, navController) }
-                        composable("seriesList") { Series(viewModel, navController) }
-                        composable("actorsList") { Actors(viewModel, navController) }
-                        composable("detailsFilms/{filmId}") {
-                            val filmId = it.arguments?.getString("filmId") ?: ""
-                            DetailsMovies(viewModel, filmId, navController)
-                        }
-                        composable("detailsSeries/{tvId}") {
-                            val tvId = it.arguments?.getString("tvId") ?: ""
-                            DetailsSeries(viewModel, tvId, navController)
+                        NavHost(
+                            navController = navController,
+                            startDestination = "profile",
+                            modifier = Modifier.padding(innerPadding)
+                        ) {
+                            composable("profile") { Screen(windowSizeClass, navController) }
+                            composable("filmsList") { Films(viewModel, navController) }
+                            composable("seriesList") { Series(viewModel, navController) }
+                            composable("actorsList") { Actors(viewModel, navController) }
+                            composable("detailsFilms/{filmId}") {
+                                val filmId = it.arguments?.getString("filmId") ?: ""
+                                DetailsMovies(viewModel, filmId, navController)
+                            }
+                            composable("detailsSeries/{tvId}") {
+                                val tvId = it.arguments?.getString("tvId") ?: ""
+                                DetailsSeries(viewModel, tvId, navController)
+                            }
                         }
                     }
-
                 }
-
-
-            //}
             }
         }
     }
 }
-
 

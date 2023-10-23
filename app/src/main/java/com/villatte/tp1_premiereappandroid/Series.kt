@@ -36,16 +36,15 @@ fun Series(viewModel: MainViewModel, navController: NavController) {
     LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         items(series) {
                 serie ->
-
-Card(onClick = { navController.navigate("detailsSeries/"+serie.id) }) {
-    AsyncImage(
-        model = "https://image.tmdb.org/t/p/w780" + serie.poster_path,
-        contentDescription = "Affiche de la série",
-        contentScale = ContentScale.Fit
-    )
-    Text(text = serie.original_name, fontWeight = FontWeight.Bold)
-    Text(text = serie.first_air_date)
-}
+                    Card(onClick = { navController.navigate("detailsSeries/"+serie.id) }) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w780" + serie.poster_path,
+                            contentDescription = "Affiche de la série",
+                            contentScale = ContentScale.Fit
+                        )
+                        Text(text = serie.original_name, fontWeight = FontWeight.Bold)
+                        Text(text = serie.first_air_date)
+                    }
                 }
     }
 
