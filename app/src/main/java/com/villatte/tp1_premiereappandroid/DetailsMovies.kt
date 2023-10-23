@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -46,31 +47,29 @@ fun DetailsMovies(viewModel: MainViewModel, filmId: String, navController: NavCo
         AsyncImage(
             model = "https://image.tmdb.org/t/p/w780" + movie.backdrop_path,
             contentDescription = "Image du film",
-            contentScale = ContentScale.Fit
+            //contentScale = ContentScale.Fit
+        Modifier.fillMaxWidth()
         )
         Row() {
             Column() {
+                Spacer(Modifier.height(15.dp))
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/w780" + movie.poster_path,
                     contentDescription = "Image du film",
-                    modifier = Modifier.size(180.dp)
+                    modifier = Modifier.size(140.dp)
                 )
             }
-            Column() {
+            Column(verticalArrangement = Arrangement.Center) {
                 Text(text = movie.release_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-                var genres = ""
-                movie.genres.forEach {
-                    genres += it.name + ", "
+                Text(movie.genres.map { it.name}.joinToString(", "))
                 }
-                Text(text = genres.substring(0, genres.length), textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-            }
             }
         Spacer(Modifier.height(20.dp))
         Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
         Text(text = movie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
         //LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-
+        Spacer(Modifier.height(15.dp))
         LazyRow() {
             items(movie.credits.cast) {
             //items(movie.credits.cast) {
