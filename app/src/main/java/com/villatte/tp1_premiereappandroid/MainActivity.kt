@@ -5,16 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -34,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
@@ -42,6 +49,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +62,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.villatte.tp1_premiereappandroid.ui.theme.Purple40
 import com.villatte.tp1_premiereappandroid.ui.theme.TP1_premiereAppAndroidTheme
 
 
@@ -86,51 +95,116 @@ class MainActivity : ComponentActivity() {
                     var searchText by remember {
                         mutableStateOf("")
                     }
+                    var search by remember {
+                        mutableStateOf(false)
+                    }
 
                     Scaffold(
-                        topBar = {
-                            if (currentDestination?.route != "profile") {
-                                if (!searchBarVisible) {
-                                    TopAppBar(title = { Text("Fav'app") },
-                                        actions = {
-                                            IconButton(onClick = { searchBarVisible = true }) {
-                                                Icon(Icons.Filled.Search, contentDescription = null)
+                        floatingActionButton = {
+                            when (windowSizeClass.widthSizeClass) {
+                                WindowWidthSizeClass.Medium -> {
+                                    if (currentDestination?.route != "profile") {
+                                        Box(modifier = Modifier
+                                            .clickable { search = true }
+                                            .clip(CircleShape)
+                                            .background(Purple40)
+                                            .size(50.dp)
+                                        ) {
+                                            Icon(
+                                                Icons.Filled.Search,
+                                                contentDescription = "Recherche flottante"
+                                            )
+                                        }
+
+                                        if (search) {
+                                            SearchBar(
+                                                query = searchText,
+                                                onQueryChange = {
+                                                    searchText = it
+                                                },
+                                                onSearch = {
+                                                    if (currentDestination?.route == "filmsList") {
+                                                        viewModel.getFilmsViaRecherche(it)
+                                                    }
+                                                    if (currentDestination?.route == "seriesList") {
+                                                        viewModel.getSeriesViaRecherche(it)
+                                                    }
+                                                    if (currentDestination?.route == "actorsList") {
+                                                        viewModel.getPersonnesViaRecherche(it)
+                                                    }
+                                                    searchBarActive = false
+                                                },
+                                                active = searchBarActive,
+                                                onActiveChange = {
+                                                    searchBarActive = it
+                                                },
+                                                modifier = Modifier.height(100.dp),
+                                                placeholder = { Text("Recherche...") }
+                                            ) {
+
                                             }
                                         }
-                                    )
-                                } else {
-                                    SearchBar(
-                                        trailingIcon = {
-                                            IconButton(onClick = { searchBarVisible = false }) {
-                                                Icon(Icons.Filled.Clear, contentDescription = null)
-                                            }},
-                                        query = searchText,
-                                        onQueryChange = {
-                                            searchText = it
-                                        },
-                                        onSearch = {
-                                            if (currentDestination?.route == "filmsList") {
-                                                viewModel.getFilmsViaRecherche(it)
-                                            }
-                                            if (currentDestination?.route == "seriesList") {
-                                                viewModel.getSeriesViaRecherche(it)
-                                            }
-                                            if (currentDestination?.route == "actorsList") {
-                                                viewModel.getPersonnesViaRecherche(it)
-                                            }
-                                            searchBarActive = false
-                                        },
-                                        active = searchBarActive,
-                                        onActiveChange = {
-                                            searchBarActive = it
-                                        },
-                                        modifier = Modifier.height(100.dp),
-                                        placeholder = { Text("Recherche...") }
-                                    ) {
-
                                     }
                                 }
                             }
+                        },
+                        topBar = {
+                            when (windowSizeClass.widthSizeClass) {
+                                WindowWidthSizeClass.Compact -> {
+                                    if (currentDestination?.route != "profile") {
+                                        if (!searchBarVisible) {
+                                            TopAppBar(title = { Text("Fav'app") },
+                                                actions = {
+                                                    IconButton(onClick = {
+                                                        searchBarVisible = true
+                                                    }) {
+                                                        Icon(
+                                                            Icons.Filled.Search,
+                                                            contentDescription = null
+                                                        )
+                                                    }
+                                                }
+                                            )
+                                        } else {
+                                            SearchBar(
+                                                trailingIcon = {
+                                                    IconButton(onClick = {
+                                                        searchBarVisible = false
+                                                    }) {
+                                                        Icon(
+                                                            Icons.Filled.Clear,
+                                                            contentDescription = null
+                                                        )
+                                                    }
+                                                },
+                                                query = searchText,
+                                                onQueryChange = {
+                                                    searchText = it
+                                                },
+                                                onSearch = {
+                                                    if (currentDestination?.route == "filmsList") {
+                                                        viewModel.getFilmsViaRecherche(it)
+                                                    }
+                                                    if (currentDestination?.route == "seriesList") {
+                                                        viewModel.getSeriesViaRecherche(it)
+                                                    }
+                                                    if (currentDestination?.route == "actorsList") {
+                                                        viewModel.getPersonnesViaRecherche(it)
+                                                    }
+                                                    searchBarActive = false
+                                                },
+                                                active = searchBarActive,
+                                                onActiveChange = {
+                                                    searchBarActive = it
+                                                },
+                                                modifier = Modifier.height(100.dp),
+                                                placeholder = { Text("Recherche...") }
+                                            ) {
+
+                                            }
+                                        }
+                                    }
+                                }}
                         },
                         bottomBar = {
                             if (currentDestination?.route != "profile") {
