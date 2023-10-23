@@ -55,14 +55,16 @@ fun Screen(windowClass: WindowSizeClass, navController: NavController) {
         WindowWidthSizeClass.Compact -> {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(10.dp, 30.dp).fillMaxSize()
+                modifier = Modifier
+                    .padding(10.dp, 30.dp)
+                    .fillMaxSize()
             ) {
                 Image(
                     painterResource(id = R.drawable.chat_intelligent),
                     contentDescription = "Photo de profil",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(200.dp,200.dp)
+                        .size(200.dp, 200.dp)
                         .clip(CircleShape)
                         .align(Alignment.CenterHorizontally)
                 )
@@ -112,82 +114,84 @@ fun Screen(windowClass: WindowSizeClass, navController: NavController) {
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
                             .paddingFromBaseline(2.dp)
-                        //.align(Alignment.CenterHorizontally)
                     )
                 }
-                Button(onClick = {navController.navigate("filmsList")}, modifier = Modifier.padding(vertical = 40.dp)) {
+                Button(
+                    onClick = { navController.navigate("filmsList") },
+                    modifier = Modifier.padding(vertical = 40.dp)
+                ) {
                     Text(text = "Démarrer")
                 }
             }
         }
-            else -> {
-
-Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
-    Image(
-        painterResource(id = R.drawable.chat_intelligent),
-        contentDescription = "Photo de profil",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            //.width(200.dp)
-            .size(200.dp,200.dp)
-            .clip(CircleShape)
-    )
-    //Spacer(Modifier.weight(50.dp))
-Column(horizontalAlignment = Alignment.CenterHorizontally) {
-    Spacer(Modifier.height(20.dp))
-    Text(
-        text = "Amandine Villatte",
-        style = MaterialTheme.typography.headlineMedium,
-        modifier = Modifier
-    )
-    Spacer(Modifier.height(20.dp))
-    Text(
-        text = "Etudiante",
-        style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier
-    )
-    Spacer(Modifier.height(5.dp))
-    Text(
-        text = "Ecole d'ingénieur ISIS - INU Champollion",
-        style = MaterialTheme.typography.bodySmall,
-        fontStyle = FontStyle.Italic,
-        modifier = Modifier
-    )
-}
-}
-                    Spacer(Modifier.height(90.dp))
+        else -> {
+            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
+                Image(
+                    painterResource(id = R.drawable.chat_intelligent),
+                    contentDescription = "Photo de profil",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.padding(40.dp)
+                        .size(200.dp, 200.dp)
+                        .clip(CircleShape)
+                )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Row() {
-                        Image(
-                            painterResource(id = R.drawable.mail_logo),
-                            contentDescription = "Logo mail", modifier = Modifier
-                                .size(20.dp)
-                        )
-                        Text(
-                            text = "amandine.villatte@etud.univ-jfc.fr",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
+                    Spacer(Modifier.height(20.dp))
+                    Text(
+                        text = "Amandine Villatte",
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier
+                    )
+                    Spacer(Modifier.height(20.dp))
+                    Text(
+                        text = "Etudiante",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                    )
                     Spacer(Modifier.height(5.dp))
-                    Row() {
-                        Image(
-                            painterResource(id = R.drawable.linkedin_logo),
-                            contentDescription = "Logo LinkedIn", modifier = Modifier
-                                .size(20.dp)
-                        )
-                        Text(
-                            text = "www.linkedin.com/in/amandine-villatte",
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                                .paddingFromBaseline(2.dp)
-                            //.align(Alignment.CenterHorizontally)
-                        )
+                    Text(
+                        text = "Ecole d'ingénieur ISIS - INU Champollion",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier
+                    )
+
+                    Spacer(Modifier.height(50.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Row() {
+                            Image(
+                                painterResource(id = R.drawable.mail_logo),
+                                contentDescription = "Logo mail", modifier = Modifier
+                                    .size(20.dp)
+                            )
+                            Text(
+                                text = "amandine.villatte@etud.univ-jfc.fr",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                        Spacer(Modifier.height(5.dp))
+                        Row() {
+                            Image(
+                                painterResource(id = R.drawable.linkedin_logo),
+                                contentDescription = "Logo LinkedIn", modifier = Modifier
+                                    .size(20.dp)
+                            )
+                            Text(
+                                text = "www.linkedin.com/in/amandine-villatte",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier
+                                    .paddingFromBaseline(2.dp)
+                            )
+                        }
                     }
-                    }
-                    Button(onClick = {navController.navigate("filmsList")}, modifier = Modifier.padding(horizontal = 5.dp, vertical = 140.dp)) {
+                    Button(
+                        onClick = { navController.navigate("filmsList") },
+                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 30.dp)
+                    ) {
                         Text(text = "Démarrer")
                     }
                 }
+            }
         }
     }
+}
 

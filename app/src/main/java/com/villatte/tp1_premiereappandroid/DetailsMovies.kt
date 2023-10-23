@@ -2,12 +2,16 @@ package com.villatte.tp1_premiereappandroid
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -44,30 +48,46 @@ fun DetailsMovies(viewModel: MainViewModel, filmId: String, navController: NavCo
             contentDescription = "Image du film",
             contentScale = ContentScale.Fit
         )
-        Text(text = movie.release_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
-        var genres = ""
-        movie.genres.forEach {
-            genres += it.name + ", "
-        }
-        Text(text = genres.substring(0, genres.length), textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+        Row() {
+            Column() {
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w780" + movie.poster_path,
+                    contentDescription = "Image du film",
+                    modifier = Modifier.size(180.dp)
+                )
+            }
+            Column() {
+                Text(text = movie.release_date, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+                var genres = ""
+                movie.genres.forEach {
+                    genres += it.name + ", "
+                }
+                Text(text = genres.substring(0, genres.length), textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
+            }
+            }
         Spacer(Modifier.height(20.dp))
         Text(text = "Synopsis", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
         Text(text = movie.overview, textAlign = TextAlign.Justify, modifier = Modifier.padding(15.dp))
         Text(text = "Têtes d'affiche", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, textAlign = TextAlign.Left)
         //LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+
+        LazyRow() {
+            items(movie.credits.cast) {
             //items(movie.credits.cast) {
-                    //cast ->
-            movie.credits.cast.forEach {
+                    cast ->
+            //movie.credits.cast.forEach {
                 Card() {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w780" + it.profile_path,
+                        model = "https://image.tmdb.org/t/p/w780" + cast.profile_path,
                         contentDescription = "Photo de la personne",
-                        contentScale = ContentScale.Fit
+                        //contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(180.dp)
                     )
-                    Text(text = it.name, fontWeight = FontWeight.Bold)
-                    Text(text = it.character)
+                    Text(text = cast.name, fontWeight = FontWeight.Bold)
+                    Text(text = cast.character)
                 }
             }
+        }
         //}
     }
 
